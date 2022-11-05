@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 // material-ui
 import { Grid } from '@mui/material';
 
 // project imports
-import EarningCard from './EarningCard';
+import StatsCard from './StatsCard';
 import PopularCard from './PopularCard';
-import TotalOrderLineChartCard from './TotalOrderLineChartCard';
+import TotalOrderLineChartCard from './TotalApplicationLineChartCard';
 import TotalIncomeDarkCard from './TotalIncomeDarkCard';
 import TotalIncomeLightCard from './TotalIncomeLightCard';
 import TotalGrowthBarChart from './TotalGrowthBarChart';
@@ -15,9 +15,35 @@ import { gridSpacing } from 'store/constant';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
+    const URL = 'http://localhost:3000/applications/stats';
+    
+    const [stats, setStats] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState('33');
+    
+    const FetchingDashboardData = useCallback(async () => {
+        try {
+            await fetch(URL)
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error("Error Connecting to the database");
+                    }
+                    return res.json();
+                })
+                .then((val) => {
+                    setStats(val.stats);
+                });
+        } catch (err) {
+            console.error(err.message);
+        }
+    }, []);
+
     useEffect(() => {
         setLoading(false);
+    }, []);
+
+    useEffect(() => {
+        FetchingDashboardData();
     }, []);
 
     return (
@@ -25,10 +51,10 @@ const Dashboard = () => {
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>
                     <Grid item lg={4} md={6} sm={6} xs={12}>
-                        <EarningCard isLoading={isLoading} />
+                        <StatsCard data={stats.total} isLoading={isLoading} />
                     </Grid>
                     <Grid item lg={4} md={6} sm={6} xs={12}>
-                        <TotalOrderLineChartCard isLoading={isLoading} />
+                        <TotalOrderLineChartCard data={stats} isLoading={isLoading} />
                     </Grid>
                     <Grid item lg={4} md={12} sm={12} xs={12}>
                         <Grid container spacing={gridSpacing}>
@@ -41,6 +67,9 @@ const Dashboard = () => {
                         </Grid>
                     </Grid>
                 </Grid>
+            </Grid>
+            <Grid item md={12}>
+                <TotalGrowthBarChart isLoading={isLoading} />
             </Grid>
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>

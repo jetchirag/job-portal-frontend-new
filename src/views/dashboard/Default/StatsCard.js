@@ -56,7 +56,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
 
-const EarningCard = ({ isLoading }) => {
+const StatsCard = ({ isLoading, data }) => {
     const theme = useTheme();
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -144,7 +144,7 @@ const EarningCard = ({ isLoading }) => {
                                 <Grid container alignItems="center">
                                     <Grid item>
                                         <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                            $500.00
+                                            {data}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
@@ -169,7 +169,7 @@ const EarningCard = ({ isLoading }) => {
                                         color: theme.palette.secondary[200]
                                     }}
                                 >
-                                    Total Earning
+                                    Total Applications
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -180,8 +180,8 @@ const EarningCard = ({ isLoading }) => {
     );
 };
 
-EarningCard.propTypes = {
+StatsCard.propTypes = {
     isLoading: PropTypes.bool
 };
 
-export default EarningCard;
+export default StatsCard;

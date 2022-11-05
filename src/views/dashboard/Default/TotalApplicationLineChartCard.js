@@ -12,7 +12,7 @@ import Chart from 'react-apexcharts';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonTotalOrderCard from 'ui-component/cards/Skeleton/EarningCard';
 
-import ChartDataMonth from './chart-data/total-order-month-line-chart';
+import ChartDataMonth from './chart-data/total-applications-month-chart';
 import ChartDataYear from './chart-data/total-order-year-line-chart';
 
 // assets
@@ -63,7 +63,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL ORDER LINE CHART CARD ||============================== //
 
-const TotalOrderLineChartCard = ({ isLoading }) => {
+const TotalOrderLineChartCard = ({ data, isLoading }) => {
     const theme = useTheme();
 
     const [timeValue, setTimeValue] = useState(false);
@@ -124,11 +124,11 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                             <Grid item>
                                                 {timeValue ? (
                                                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                                        $108
+                                                        {data.thisMonth}
                                                     </Typography>
                                                 ) : (
                                                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                                        $961
+                                                        {data.thisYear}
                                                     </Typography>
                                                 )}
                                             </Grid>
@@ -152,7 +152,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                                         color: theme.palette.primary[200]
                                                     }}
                                                 >
-                                                    Total Order
+                                                    Applications Received
                                                 </Typography>
                                             </Grid>
                                         </Grid>
