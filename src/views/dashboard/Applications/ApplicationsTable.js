@@ -73,6 +73,7 @@ const ApplicationsTable = ({ isLoading }) => {
                     const newApplicantList = val.results.map((item) => {
                         return {
                             id: item.id,
+                            _id: item._id,
                             status: item.status,
                             avatar: item.photo,
                             name: item.applicant.firstName + " " + item.applicant.lastName,
@@ -201,9 +202,9 @@ const ApplicationsTable = ({ isLoading }) => {
             }
         },
         {
-            field: 'actions', headerName: 'Actions', width: 120, renderCell: (params) => {
+            field: '_id', headerName: 'Actions', width: 120, renderCell: (params) => {
                 return (
-                    <Button variant="contained" color="primary" size="small" target="_blank">View Details</Button>
+                    <Button variant="contained" color="primary" size="small" href={"/dashboard/application/" + params.value} target="_blank">View Details</Button>
                 );
             }
         },
@@ -294,12 +295,12 @@ const ApplicationsTable = ({ isLoading }) => {
                 <Grid item xs={12}>
 
 
-                    <div style={{ height: 600, width: '100%' }}>
+                    <div style={{ height: 800, width: '100%' }}>
                         <DataGrid
                             rows={applicantList}
                             columns={columns}
-                            pageSize={5}
-                            rowsPerPageOptions={[5]}
+                            pageSize={10}
+                            rowsPerPageOptions={[10]}
                             checkboxSelection
                             density="comfortable"
                             loading={loading}
