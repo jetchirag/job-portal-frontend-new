@@ -45,17 +45,21 @@ const ApplicationsTable = ({ isLoading }) => {
     });
 
     const FetchingData = useCallback(async () => {
+
+
+        console.log(encodeURIComponent(filters.department));
+
         setLoading(true);
         try {
             await fetch(URL +
-                "?jobType=" + filters.jobType +
-                "&faculty=" + filters.faculty +
-                "&school=" + filters.school +
-                "&department=" + filters.department +
-                "&status=" + filters.status +
+                "?jobType=" + encodeURIComponent(filters.jobType) +
+                "&faculty=" + encodeURIComponent(filters.faculty) +
+                "&school=" + encodeURIComponent(filters.school) +
+                "&department=" + encodeURIComponent(filters.department) +
+                "&status=" + encodeURIComponent(filters.status) +
                 "&startDate="  +
                 "&endDate=" +
-                "&searchName=" + searchName
+                "&searchName=" 
             )
                 .then((res) => {
                     if (!res.ok) {
@@ -110,7 +114,8 @@ const ApplicationsTable = ({ isLoading }) => {
                 .then((val) => {
                     console.log(val);
                     setFacultiesData(val);
-                    const newFacultiesSelect = [''];
+                    
+                    const newFacultiesSelect = ['Any'];
                     for (var key of Object.keys(val)) {
                         newFacultiesSelect.push(key);
                     }
@@ -137,12 +142,17 @@ const ApplicationsTable = ({ isLoading }) => {
     };
 
     const handleFacultyChange= (event: SelectChangeEvent<typeof filters>) => {
-        setFilters({ ...filters, faculty: event.target.value });
-        const newSchoolSelect = [''];
-        for (var key of Object.keys(facultiesData[event.target.value])) {
-            newSchoolSelect.push(key);
+        if (event.target.value === 'Any') {
+            setFilters({ ...filters, faculty: '', school: '', department: '' });
         }
-        setSchoolSelect(newSchoolSelect);
+        else {
+            setFilters({ ...filters, faculty: event.target.value });
+            const newSchoolSelect = [''];
+            for (var key of Object.keys(facultiesData[event.target.value])) {
+                newSchoolSelect.push(key);
+            }
+            setSchoolSelect(newSchoolSelect);
+        }
     };
 
     const handleSchoolChange = (event: SelectChangeEvent<typeof filters>) => {
@@ -175,6 +185,9 @@ const ApplicationsTable = ({ isLoading }) => {
         },
         { field: 'name', headerName: 'Name', width: 200, },
         { field: 'createdDate', headerName: 'Date Applied', width: 200, },
+        { field: 'faculty', headerName: 'Faculty', width: 200, hide: true},
+        { field: 'school', headerName: 'School', width: 200, hide: true },
+        { field: 'department', headerName: 'Department', width: 200, hide: true },
         { field: 'status', headerName: 'Status', width: 160, renderCell: (params) => {
             return (
             <Chip label={params.value} sx={{ bgcolor: statusColor[params.value], color: '#fff' }}/>
